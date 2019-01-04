@@ -1,0 +1,42 @@
+{
+	"name" : "Prophet",
+	"tags" : [
+		"Machine Learning",
+		"Forecasting",
+		"Lang=R"
+	],
+	"description" : "The Facebook Prophet Algorithm wrapped in R",
+	"configuration" : {
+		"parameters" : [
+			{
+				"name" : "Days",
+				"type" : "integer",
+				"help" : "How many days in the future would you like to forecast for?"
+			}
+		]
+	},
+	"input" : {
+		"format" : "csv-file",
+		"format-options" : {
+			"location" : "./input.csv"
+		},
+		"schema" : {
+			"help" : "Please provide a Flux query that yields a timestamp and floating point number value.",
+			"timestamp" : "true",
+			"timestamp-resolution" : "d",
+			"timestamp-ordinal" : 1,
+			"inputs" : [
+				{
+					"name" : "value",
+					"type" : "float"
+				}
+			]
+		}
+	},
+	"actions" : [
+		{
+			"name" : "Forecast",
+			"help" : "Prepare a forecast according to the input data and configuration"
+		}
+	]
+}

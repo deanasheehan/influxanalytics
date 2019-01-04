@@ -1,5 +1,45 @@
-<p>
-  configure-instance works! {{imageName}}
+
+<div *ngIf="catalogItem">
+
+  <p>
+    Please provide the information necessary to configure an instance of this {{catalogItem.name}} analytics image.
+  </p>
+
+  <form>
+
+    <p>
+      <mat-form-field class="example-full-width" hintLabel="Please provide a name for this analytics instance">
+        <input [(ngModel)]="instanceName" name="instanceName" matInput placeholder="Name" value="--auto--">
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field class="example-full-width" hintLabel="Optional description for this new analytics instance">
+        <textarea [(ngModel)]="instanceDescription" name="instanceDescription" matInput placeholder="Description"></textarea>
+      </mat-form-field>
+    </p>
+
+    <!-- This is a hack to avoid getting into dynamic forms at this stage -->
+    <div *ngIf="hasParam('Days')">
+      <p>
+        <mat-form-field class="example-full-width">
+          <input [(ngModel)]="configDays" name="configDays" matInput placeholder="Day" value="">
+        </mat-form-field>
+      </p>
+    </div>
+ 
+    <p>
+      <mat-form-field  class="example-full-width" hintLabel="{{catalogItem.input.schema.help}}">
+        <textarea [(ngModel)]="instanceInputQuery" name="instanceInputQuery" matInput placeholder="Input Query"></textarea>
+      </mat-form-field>
+    </p>
+  
+
+  </form>
+
+
   <button (click)="goBack()">Cancel</button>
   <button (click)="goCreate()">Create</button>
-</p>
+
+</div>
+

@@ -7,7 +7,8 @@ var Promise = require("bluebird");
 let catalogImages = [
   'testimage',
   'testimage2',
-  'testimage3'
+  'testimage3',
+  'fbprophetr'
 ]
 
 let catalog = []

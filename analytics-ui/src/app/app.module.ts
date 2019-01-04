@@ -5,6 +5,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
 import {NgModule} from '@angular/core';
+import { FormsModule } from '@angular/forms'
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -97,7 +98,8 @@ import { ConfigureInstanceComponent } from './configure-instance/configure-insta
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   exports: [
     CdkTableModule,

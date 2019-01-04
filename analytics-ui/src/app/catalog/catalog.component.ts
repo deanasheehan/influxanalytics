@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { CatalogService} from '../catalog.service'
 
 @Component({
   selector: 'app-catalog',
@@ -10,24 +8,15 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class CatalogComponent implements OnInit {
 
-  private analyticsApi = 'http://localhost:3000/catalog';  // URL to web api
-
-  constructor(private http: HttpClient) { }
+  constructor(private catalogService: CatalogService) { }
 
   catalogItems = null;
 
   selectedItem = null;
 
   ngOnInit() {
-    this.getCatalogItems()
+    this.catalogService.getCatalogItems()
     .subscribe(items => this.catalogItems = items);
-  }
-
-  getCatalogItems() : Observable<Object> {
-    return this.http.get(this.analyticsApi)
-    .pipe(
-      tap(x => console.log('fetched items',x))
-    );
   }
 
   onSelect (item) {
