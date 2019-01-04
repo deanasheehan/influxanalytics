@@ -1,4 +1,7 @@
-<mat-list *ngFor="let item of catalogItems">
+<mat-list *ngFor="let item of catalogItems" (click)="onSelect(item)">
     <mat-list-item> {{item.name}} </mat-list-item>
 </mat-list>
+<mat-divider></mat-divider>
+<app-catalog-item-detail [catalogItem]="selectedItem"></app-catalog-item-detail>
+
 

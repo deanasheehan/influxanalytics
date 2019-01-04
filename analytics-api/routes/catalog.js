@@ -5,19 +5,24 @@ var dockerUtil = require('../docker-util');
 var Promise = require("bluebird");
 
 let catalogImages = [
-  'testimage'
+  'testimage',
+  'testimage2',
+  'testimage3'
 ]
 
-Promise.each(catalogImages,image=>dockerUtil.getInfluxAnalyticsMetadata(image).then(metadata=>{console.log('meta data',metadata)}))
-  
-  .catch(error=>{console.log('error',error)})
+let catalog = []
 
+catalogImages.forEach(element => {
+  dockerUtil.getInfluxAnalyticsMetadata(element)
+    .then(metadata=>{
+      metadata.imageName = element;
+      console.log(metadata)
+      catalog.push(metadata)
+    })
+    .catch(error=>{console.log('Unable to obtained meta data for image',element)}) 
+});
 
 router.get('/', function(req, res, next) {
-  catalog = [
-    {name:"FBProphet",tags:["ML","Forecasting","Lang=R"]},
-    {name:"MAD",tags:["ML","Anomoly Detection","Lang=Python"]},
-  ]
   res.json(catalog);
 });
 

@@ -1,0 +1,6 @@
+<div *ngIf="catalogItem">
+  <p>{{catalogItem.description}}</p>
+  <p>{{catalogItem.tags}}</p>
+  <p>{{catalogItem.imageName}}</p>
+  <button mat-raised-button  routerLink="/configure/{{catalogItem.imageName}}">Configure Instance</button>
+</div>

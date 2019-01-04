@@ -49,6 +49,8 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { InstancesComponent } from './instances/instances.component';
 import { ActivitiesComponent } from './activities/activities.component';
 import { HttpClientModule }    from '@angular/common/http';
+import { CatalogItemDetailComponent } from './catalog-item-detail/catalog-item-detail.component';
+import { ConfigureInstanceComponent } from './configure-instance/configure-instance.component';
 
 @NgModule({
 
@@ -142,7 +144,9 @@ import { HttpClientModule }    from '@angular/common/http';
     AppComponent,
     CatalogComponent,
     InstancesComponent,
-    ActivitiesComponent
+    ActivitiesComponent,
+    CatalogItemDetailComponent,
+    ConfigureInstanceComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

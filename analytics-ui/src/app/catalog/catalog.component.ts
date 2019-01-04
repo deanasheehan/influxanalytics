@@ -16,6 +16,8 @@ export class CatalogComponent implements OnInit {
 
   catalogItems = null;
 
+  selectedItem = null;
+
   ngOnInit() {
     this.getCatalogItems()
     .subscribe(items => this.catalogItems = items);
@@ -26,6 +28,10 @@ export class CatalogComponent implements OnInit {
     .pipe(
       tap(x => console.log('fetched items',x))
     );
+  }
+
+  onSelect (item) {
+    this.selectedItem = item;
   }
 
 }
