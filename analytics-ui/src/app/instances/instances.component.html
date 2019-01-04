@@ -1,5 +1,9 @@
-<mat-list>
-    <mat-list-item> Pepper </mat-list-item>
-    <mat-list-item> Salt </mat-list-item>
-    <mat-list-item> Paprika </mat-list-item>
+<mat-list *ngFor="let item of instanceItems" (click)="onSelect(item)">
+    <mat-list-item> {{item.instanceName}} </mat-list-item>
 </mat-list>
+<mat-divider></mat-divider>
+<app-instance-detail [instance]="selectedInstance"></app-instance-detail>
+
+    
+    
+    

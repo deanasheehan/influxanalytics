@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InstancesService {
 
-  constructor() { }
+  private analyticsApi = 'http://localhost:3000/instances';  // URL to web api
 
-  createInstace (imageName, instanceName, params) {
+  constructor(private http: HttpClient) { }
 
+  getInstances() : Observable<Object> {
+    return this.http.get(this.analyticsApi)
+    .pipe(
+      tap(x => console.log('fetched instances',x))
+    );
   }
+
 }

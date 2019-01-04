@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InstancesService } from '../instances.service'
 
 @Component({
   selector: 'app-instances',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InstancesComponent implements OnInit {
 
-  constructor() { }
+  instanceItems = null
+  selectedInstance = null
+
+  constructor(private instancesService: InstancesService) { }
 
   ngOnInit() {
+    this.instancesService.getInstances()
+      .subscribe(items => this.instanceItems = items);
+  }
+
+  onSelect (item) {
+    this.selectedInstance = item;
   }
 
 }
