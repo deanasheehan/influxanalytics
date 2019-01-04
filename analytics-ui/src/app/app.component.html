@@ -1,0 +1,17 @@
+<div style="text-align:center">
+  <h1>Influx Analytics</h1>
+  <mat-divider></mat-divider>
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav mode="side" opened>
+        <mat-list>
+            <mat-list-item><a routerLink="/catalog">Catalog</a></mat-list-item>
+            <mat-list-item><a routerLink="/instances">Instances</a></mat-list-item>
+            <mat-list-item><a routerLink="/activities">Activities</a></mat-list-item>
+          </mat-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
