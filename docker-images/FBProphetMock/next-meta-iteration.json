@@ -1,0 +1,94 @@
+{
+    
+    "forecast" : {
+        "actions" : [
+            {
+                "label" : "Generate Forecast",
+                "enablingStates" : [],
+                "input" : {
+                    "format" : "cvs-file",
+                    "params" : [
+                        {
+                            "label" : "Days",
+                            "type" : "Integer"
+                        }
+                    ],
+                    "timeseriesData" : [
+                        "date",
+                        "value"
+                    ]
+                },
+                "output" : [
+                    {
+                        "label":"timestamp"
+                    },
+                    {
+                        "label":"value"
+                    }
+                ]
+           }
+        ]
+    },
+
+    "ad" : {
+        "actions" : [
+            {
+                "type" : "sho",
+                "label" : "Train Detector",
+                "successState" : "Trained",
+                "input" : {
+                    "format" : "cvs-file",
+                    "params" : [],
+                    "dataSchema" : [
+                        "date",
+                        "value"
+                    ]
+                },
+                "output" : {
+
+                }
+            },
+            {
+                "type" : "periodic",
+                "label" : "Start Detection",
+                "input" : {
+                    "format" : "cvs-file",
+                    "params" : [
+                        "upperLimit",
+                        "lowerLimit"
+                    ],
+                    "dataSchema" : [
+                        "date",
+                        "value"
+                    ]
+                },
+                "enablingStates" : ["Trained"],
+                "terminationLabel" :"Stop Detection",
+                "terminationState" : "Trained"
+            }
+        ]
+    },
+
+    "transform" : {
+        "actions" : [
+            {
+                "type" : "long-running",
+                "label" : "Start Transformation",
+                "terminationLabel" : "Stop Transformation",
+                "input" : {
+                    "params" : [
+                        "upperLimit",
+                        "lowerLimit"
+                    ],
+                    "dataSchema" : [
+                        "date",
+                        "value"
+                    ]
+                },
+                "output" : {
+                    
+                }
+            }
+        ]
+    }
+}

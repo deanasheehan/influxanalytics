@@ -1,0 +1,99 @@
+{
+	"name" : "Prophet",
+	"tags" : [
+		"Machine Learning",
+		"Forecasting",
+		"Lang=R"
+	],
+	"description" : "The Facebook Prophet Algorithm wrapped in R",
+	"configuration" : {
+		"parameters" : [
+			{
+				"name" : "Days",
+				"type" : "integer",
+				"help" : "How many days in the future would you like to forecast for?"
+			}
+		]
+	},
+	"input" : {
+		"format" : "csv-file",
+		"format-options" : {
+			"location" : "./input.csv"
+		},
+		"schema" : {
+			"help" : "Please provide a Flux query that yields a timestamp and floating point number value.",
+			"timestamp" : "true",
+			"timestamp-resolution" : "d",
+			"timestamp-ordinal" : 1,
+			"inputs" : [
+				{
+					"name" : "value",
+					"type" : "float"
+				}
+			]
+		}
+	},
+	"actions" : [
+		{
+			"name" : "Forecast",
+			"help" : "Prepare a forecast according to the input data and forecast parameters",
+			"parameters" : 
+				[
+					{
+						"name" : "Days",
+						"type" : "integer",
+						"help" : "How many days in the future would you like to forecast for?"
+					}
+				],
+			"input" : {
+				"format" : "csv-file",
+				"format-options" : {
+					"location" : "./input.csv"
+				},
+				"fields" : [
+					{
+						"timestamp":true,
+						"epoc":"d",
+						"headerLabel":"ds"	
+					},
+					{
+						"type":"float",
+						"headerLabel":"y"
+					}
+				]
+			},
+			"output" : {
+				"format" : "csv-file",
+				"format-options" : {
+					"location" : "./output.csv"
+				},
+				"fields" : [
+					{
+						"ignore":true
+					},
+					{
+						"timestamp":true,
+						"epoc":"d"
+					},
+					"trend",
+					"additive_terms",
+					"additive_terms_lower",
+					"additive_terms_upper",
+					"weekly","weekly_lower",
+					"weekly_upper",
+					"yearly",
+					"yearly_lower",
+					"yearly_upper",
+					"multiplicative_terms",
+					"multiplicative_terms_lower",
+					"multiplicative_terms_upper",
+					"yhat_lower",
+					"yhat_upper",
+					"trend_lower",
+					"trend_upper",
+					"yhat"
+				]
+			}
+		}
+	]
+}

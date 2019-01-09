@@ -10,18 +10,16 @@ API is built using NodeJS (regular JavaScript, not TypeScript)
 
 Spin up the container with mock input data, no command line arguments (forecast days for example), collect output data
 
-- Really checking here that we can spin up ProphetR having first put some input data in place and that we can collect output data after the proess has finished but before the container is killed.
+- Really checking here that we can spin up (having built) ProphetR having first put some input data in place and that we can collect output data after the process has finished but before the container is killed.
 
 - Then it will be about collecting data from influx via Flux query
 - - We'll have had to load that data into Influx first
+- - Query will be hand coded and copy n pasted from outside
 
-- Then it is about writing the captured result back to Influx via API calls (not Flux but field spec)
+- Then it is about writing the captured result back to Influx via API calls 
+- - This will not use Flux, it will be direct API Write and we'll need to have a map of cols to field names (and tags) to write to 
 
 - Then we want to show the past and present activities list
-
-
-
-
 
 ### To make MAD example work
 - We need to separate out 'Train Model' action from 'Activate Detection'
