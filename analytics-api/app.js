@@ -5,6 +5,7 @@ var logger = require('morgan');
 
 var catalogRouter = require('./routes/catalog');
 var instancesRouter = require('./routes/instances');
+var activities = require('./routes/activities');
 
 var app = express();
 
@@ -22,5 +23,6 @@ app.use(function(req, res, next) {
 
 app.use('/catalog', catalogRouter);
 app.use('/instances', instancesRouter);
+app.use('/activities', activities.router);
 
 module.exports = app;

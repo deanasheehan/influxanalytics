@@ -1,6 +1,7 @@
-<mat-list>
-    <mat-list-item> Pepper </mat-list-item>
-    <mat-list-item> Salt </mat-list-item>
-    <mat-list-item> Paprika </mat-list-item>
-  </mat-list>
+<H1>
+    Activities
+</H1>
+<mat-list dense *ngFor="let item of activities">
+    <mat-list-item> {{item.date | date : 'mediumTime'}} : {{item.name}} : {{item.state}} </mat-list-item>
+</mat-list>
 

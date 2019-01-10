@@ -19,4 +19,12 @@ export class InstancesService {
     );
   }
 
+  execute (instance) {
+    console.log('instance service execute',instance)
+    return this.http.post(this.analyticsApi+'/'+ instance + '/execute',null)
+    .pipe(
+      tap(x => console.log('instance executed',x))
+    );
+  }
+
 }

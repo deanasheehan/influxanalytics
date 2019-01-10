@@ -1,4 +1,7 @@
-<mat-list *ngFor="let item of instanceItems" (click)="onSelect(item)">
+<H1>
+        Instances
+</H1>
+<mat-list dense *ngFor="let item of instanceItems" (click)="onSelect(item)">
     <mat-list-item> {{item.instanceName}} </mat-list-item>
 </mat-list>
 <mat-divider></mat-divider>

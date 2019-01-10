@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { InstancesService } from '../instances.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-instance-detail',
@@ -9,9 +12,20 @@ export class InstanceDetailComponent implements OnInit {
 
   @Input() instance: any;
 
-  constructor() { }
+  configDays = 365;
+
+  instanceInputQuery = "";
+
+  constructor(private instanceService: InstancesService,private router: Router,) { }
 
   ngOnInit() {
+  }
+
+  execute () {
+    this.instanceService.execute(this.instance.instanceName)
+      .subscribe(obj=>{
+        this.router.navigate(['/activities']);
+      })
   }
 
 }

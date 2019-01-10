@@ -49,7 +49,10 @@ rl.on('close',()=>{
 
 Next steps:
 
-1 - UI Capture input query to run against Influx
+
+0 - wire it up so that in 'Execute FOrecaste' I run hardwired query, collect results and push to Influx!
+
+1 - UI Capture input query AND 'days' against action to run against Influx
 2 - UI Capture output destination: database, measurement, output schema field by field mapping? Additional tags?
 3 - On Execute, query data, spin up container, write data to container, wait for container to finish, read data and write data back to influx
 

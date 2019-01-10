@@ -32,16 +32,14 @@ docker.container.create({Image: 'fbprophetmock'})
   .then(_container => {container = _container})
   .then(() => container.status())
   .then(status => console.log("pre upload status",status.data.State.Status))
-  .then(() => container.fs.put('./input-csv.tar', {path: 'root'}))
-  //.then(result=>console.log('put result',result))
-  //.then(stream => promisifyStream(stream))
+  .then(() => container.fs.put('./query-output-csv.tar', {path: 'root'}))
   .then(() => container.status())
   .then(status => console.log("post upload status",status.data.State.Status))  
   .then(() => container.start())
   .then(() => waitForExit(container))
   .then(() => container.fs.get({ path: './output.csv' }))
   .then(stream => {
-    const file = fs.createWriteStream("output-csv.tar");
+    const file = fs.createWriteStream("analysis-output-csv.tar");
     stream.pipe(file);
     return promisifyStream(stream);
   })

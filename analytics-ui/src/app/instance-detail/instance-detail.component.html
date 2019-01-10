@@ -1,8 +1,38 @@
+<p>
+Instance Detail
+</p>
 <div *ngIf="instance">
     <p><strong>Name:</strong> {{instance.instanceName}}</p>
     <p><strong>Description:</strong> {{instance.instanceDescription}}</p>
     <!-- config& params -->
     <!-- what actions can be executed? -->
     <!-- I'm hardcoding Generate Forecast for the moment -->
-    <button mat-raised-button>Generate Forecast</button>
+
+  
+
+
+          <mat-grid-list cols="2" rowHeight="100px">
+                <mat-grid-tile>
+                        <mat-form-field class="example-full-width" hintLabel="Some help more here">
+                                <input [(ngModel)]="configDays" name="configDays" matInput placeholder="Day" value="365">
+                        </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                        <mat-form-field  class="example-full-width" hintLabel="Some help here">
+                                <input [(ngModel)]="instanceInputQuery" name="instanceInputQuery" matInput placeholder="Output Database">
+                        </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                        <mat-form-field  class="example-full-width" hintLabel="Some help here">
+                                <input [(ngModel)]="instanceInputQuery" name="instanceInputQuery" matInput placeholder="Input Query">
+                        </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                        <mat-form-field  class="example-full-width" hintLabel="Some help here">
+                                <input [(ngModel)]="instanceInputQuery" name="instanceInputQuery" matInput placeholder="Output Measurement">
+                        </mat-form-field>
+                </mat-grid-tile>
+           </mat-grid-list>
+
+    <button mat-raised-button (click)="execute()">Generate Forecast</button>
 </div>

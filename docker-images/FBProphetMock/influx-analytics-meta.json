@@ -42,7 +42,8 @@
 					{
 						"name" : "Days",
 						"type" : "integer",
-						"help" : "How many days in the future would you like to forecast for?"
+						"help" : "How many days in the future would you like to forecast for?",
+						"default" : "365"
 					}
 				],
 			"input" : {
@@ -54,10 +55,10 @@
 					{
 						"timestamp":true,
 						"epoc":"d",
-						"headerLabel":"ds"	
+						"headerLabel":"ds",
+						"format":"\"isoDate\""
 					},
 					{
-						"type":"float",
 						"headerLabel":"y"
 					}
 				]
