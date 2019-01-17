@@ -7,6 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import  nameGenerator from '@afuggini/namegenerator';
+
 @Component({
   selector: 'app-configure-instance',
   templateUrl: './configure-instance.component.html',
@@ -27,7 +29,7 @@ export class ConfigureInstanceComponent implements OnInit {
     private instancesService: InstancesService,
     private http: HttpClient) { }
 
-    instanceName = "";
+    instanceName = nameGenerator('-');
     instanceDescription = "";
     instanceInputQuery = "";
     configDays = "";
