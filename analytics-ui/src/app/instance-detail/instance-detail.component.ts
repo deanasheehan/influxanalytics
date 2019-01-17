@@ -12,9 +12,11 @@ export class InstanceDetailComponent implements OnInit {
 
   @Input() instance: any;
 
-  configDays = 365;
-
-  instanceInputQuery = "";
+  inputParamDays = 365;
+  inputDatabase = "";
+  inputQuery = "";
+  outputMeasurement = "";
+  outputDatabase = "";
 
   constructor(private instanceService: InstancesService,private router: Router,) { }
 

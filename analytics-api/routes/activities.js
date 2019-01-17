@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
 module.exports = {
   "router": router,
-  "addActivity ": function (date,name,state) {
-    activities.push({date:date,name:name,state:state})
+  "addActivity ": function (date,name,action,state) {
+    activities.push({date:date,name:name,action,state:state})
   }
 }

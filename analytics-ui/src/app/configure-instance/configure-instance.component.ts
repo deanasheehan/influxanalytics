@@ -29,12 +29,14 @@ export class ConfigureInstanceComponent implements OnInit {
     private instancesService: InstancesService,
     private http: HttpClient) { }
 
-    instanceName = nameGenerator('-');
+    instanceName = "";
     instanceDescription = "";
     instanceInputQuery = "";
     configDays = "";
 
     ngOnInit() {
+      this.instanceName = nameGenerator('-')
+      this.instanceName = this.instanceName.charAt(0).toUpperCase() + this.instanceName.slice(1);
       this.imageName = this.route.snapshot.paramMap.get('imageName');
       this.catalogService.getItemByName(this.imageName,(error,item)=>{
         console.log('have looked up imageName and found it',this.imageName,item)

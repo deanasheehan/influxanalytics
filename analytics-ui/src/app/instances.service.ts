@@ -21,7 +21,20 @@ export class InstancesService {
 
   execute (instance) {
     console.log('instance service execute',instance)
-    return this.http.post(this.analyticsApi+'/'+ instance + '/execute',null)
+    let body = {
+      action : "Generate Forecast",
+      input: {
+        query : {
+            db : "analytics",
+            text: 'SELECT "value" FROM "analytics"."autogen"."data"'
+        }
+      },
+      output : {
+        db : "analytics",
+        measurement : "forecast"
+      } 
+    }
+    return this.http.post(this.analyticsApi+'/'+ instance + '/execute',body)
     .pipe(
       tap(x => console.log('instance executed',x))
     );

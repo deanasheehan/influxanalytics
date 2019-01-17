@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivitiesService} from '../activities.service'
 
-
+export interface Activity {
+  date: Date;
+  name: string;
+  action: string;
+  state: string;
+}
 
 @Component({
   selector: 'app-activities',
@@ -13,15 +18,21 @@ export class ActivitiesComponent implements OnInit {
 
   constructor(private activitiesService: ActivitiesService) { }
 
-  activities = null;
+  activities: Activity[] = [];
 
   interval = null;
 
+  displayedColumns = ["date","name","action","state"]
+
   ngOnInit() {
-    this.interval = setInterval( () => {
-      this.activitiesService.getActivities()
-        .subscribe(activities => this.activities = activities); 
-    },1000);
+    this.activitiesService.getActivities()
+    .subscribe(activities => {
+      this.activities = <Activity[]>activities
+      this.interval = setInterval( () => {
+        this.activitiesService.getActivities()
+          .subscribe(activities => this.activities = <Activity[]>activities); 
+      },1000);
+    }); 
   }
 
   ngOnDestroy(){

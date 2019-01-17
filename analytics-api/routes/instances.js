@@ -23,19 +23,44 @@ router.post('/',function(req,res,next){
   res.json(req.body)
 })
 
+
+
+/*
+Going to need to know verb and input params for that verb
+Input query
+Params
+What to do with result (if it has a result)
+All that would come from the body
+{
+    input: {
+        query : {
+            db : "",
+            text: ""
+        },
+        params : {
+            "days" : ""
+        }
+    },
+    output :
+    {
+        db : "".
+        measurement : ""
+    }
+}
+*/
 router.post('/:id/execute',function(req,res,next){
   console.log('execute',req.params.id)
 
   // record there is an instance executing
-  activities["addActivity "](Date.now(),req.params.id ,"Started")
+  activities["addActivity "](Date.now(),req.params.id ,req.body.action,"Started")
 
   // query, write the input tar file
   let query = {
     url : "http://localhost:8086/query",
     form : {
-        "db":"analytics",
-        "q" : `SELECT "value" FROM "analytics"."autogen"."data"`,
-        "epoch":"ms"
+        "db":req.body.input.query.db,
+        "q" : req.body.input.query.text,
+        "epoch":"ms" // WTODO HERE DOES THIS COME FROM?
     }
   }
   request.post(query,(error,response,body)=>{
@@ -60,9 +85,9 @@ router.post('/:id/execute',function(req,res,next){
                     .then(()=>{
                         console.log('tar created')
                         executeAnalysis()
-                          .then(()=>uploadForecast())
+                          .then(()=>uploadForecast(req.body.output.db,req.body.output.measurement))
                           .then(()=>{
-                            activities["addActivity "](Date.now(),req.params.id,"Completed")
+                            activities["addActivity "](Date.now(),req.params.id,req.body.action,"Completed")
                           })
 
 
@@ -151,7 +176,7 @@ const promisifyStream = stream => new Promise((resolve, reject) => {
 });
 
 
-function uploadForecast () {
+function uploadForecast (database, measurement) {
   return new Promise((resolve,reject)=>{
 
     const fs = require('fs');
@@ -185,10 +210,10 @@ function uploadForecast () {
                         cbk();
                     } else {
                     //"","ds","trend","additive_terms"=3,"additive_terms_lower=4","additive_terms_upper=5","weekly=6","weekly_lower=7","weekly_upper=8","yearly=9","yearly_lower=10","yearly_upper=11","multiplicative_terms=12","multiplicative_terms_lower=13","multiplicative_terms_upper=14","yhat_lower=15","yhat_upper=16","trend_lower=17","trend_upper=18","yhat=19"
-                    var data = `forecast trend=${line[2]},additive_terms=${line[3]},additive_terms_lower=${line[4]},additive_terms_upper=${line[5]},weekly=${line[6]},weekly_lower=${line[7]},weekly_upper=${line[8]},yearly=${line[9]},yearly_lower=${line[10]},yearly_upper=${line[11]},multiplicative_terms=${line[12]},multiplicative_terms_lower=${line[13]},multiplicative_terms_upper=${line[14]},yhat_lower=${line[15]},yhat_upper=${line[16]},trend_lower=${line[17]},trend_upper=${line[18]},yhat=${line[19]} ${Date.parse(line[1])}`
+                    var data = measurement + ` trend=${line[2]},additive_terms=${line[3]},additive_terms_lower=${line[4]},additive_terms_upper=${line[5]},weekly=${line[6]},weekly_lower=${line[7]},weekly_upper=${line[8]},yearly=${line[9]},yearly_lower=${line[10]},yearly_upper=${line[11]},multiplicative_terms=${line[12]},multiplicative_terms_lower=${line[13]},multiplicative_terms_upper=${line[14]},yhat_lower=${line[15]},yhat_upper=${line[16]},trend_lower=${line[17]},trend_upper=${line[18]},yhat=${line[19]} ${Date.parse(line[1])}`
                     //console.log(data);
                     //cbk();
-                    request.post({url:"http://localhost:8086/write?db=analytics&precision=ms",body:data},(error,response,body)=>{
+                    request.post({url:"http://localhost:8086/write?db="+database+"&precision=ms",body:data},(error,response,body)=>{
                         //console.log('error:', error); // Print the error if one occurred
                         //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
                         //console.log('body:', body); // Print the HTML for the Google homepage.
