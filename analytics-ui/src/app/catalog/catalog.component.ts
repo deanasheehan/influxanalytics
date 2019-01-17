@@ -14,6 +14,8 @@ export class CatalogComponent implements OnInit {
 
   selectedItem = null;
 
+  displayedColumns = ["name","description","tags"]
+
   ngOnInit() {
     this.catalogService.getCatalogItems()
     .subscribe(items => this.catalogItems = items);
