@@ -12,29 +12,64 @@ export class InstanceDetailComponent implements OnInit {
 
   @Input() instance: any;
 
+  /*
+  whichForm = 'prophet2'
   inputParamDays = 365;
   inputDatabase = "";
   inputQuery = "";
   outputMeasurement = "";
   outputDatabase = "";
+  */
 
-  constructor(private instanceService: InstancesService,private router: Router,) { }
-
-  ngOnInit() {
+  forecastFormDataBinding = {
+    days : 365,
+    inputDatabase : "analytics",
+    inputQuery : 'SELECT "value" FROM "analytics"."autogen"."data"',
+    outputDatabase : "analytics",
+    outputMeasurement : "forecast"
   }
 
-  execute () {
+  trainFormDataBinding = {
+    coefficient : 1.4,
+    inputDatabase : "analytics",
+    inputQuery : 'SELECT "value" FROM "analytics"."autogen"."data"',
+  }
+
+  detectFormDataBinding = {
+    deviation: 2,
+    frequency: 5,
+    inputDatabase : "analytics",
+    inputQuery : "",
+    outputDatabase : "",
+    outputMeasurement : ""    
+  }
+
+  constructor(private instanceService: InstancesService,private router: Router) { }
+
+  ngOnInit() {
+   }
+
+  showAction(name) {
+    if (this.instance.catalog.imageName == name) {
+      return true;
+    } else {
+      console.log('instace.catalog.imageName',this.instance.catalog.imageName,name)
+      return false;
+    }
+  }
+
+  executeActionByIndex (actionIndex) {
     let body = {
       action : "Generate Forecast",
       input: {
         query : {
-            db : "analytics", // TODO
-            text: this.inputQuery // 'SELECT "value" FROM "analytics"."autogen"."data"'
+            db : this.forecastFormDataBinding.inputDatabase,
+            text: this.forecastFormDataBinding.inputQuery // 'SELECT "value" FROM "analytics"."autogen"."data"'
         }
       },
       output : {
-        db : this.outputDatabase, // "analytics",
-        measurement : this.outputMeasurement // "forecast"
+        db : this.forecastFormDataBinding.outputDatabase, // "analytics",
+        measurement : this.forecastFormDataBinding.outputMeasurement // "forecast"
       } 
     }
 
@@ -43,5 +78,14 @@ export class InstanceDetailComponent implements OnInit {
         this.router.navigate(['/activities']);
       })
   }
+
+  actionEnabledByIndex(index) {
+    return true;
+  }
+
+  formByActionIndex(index) {
+    return this.instance.catalog.actions[index].formType
+  }
+
 
 }

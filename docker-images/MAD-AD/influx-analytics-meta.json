@@ -1,0 +1,89 @@
+{
+	"name" : "MAD Anomoly Detecion",
+	"tags" : [
+		"Machine Learning",
+		"Anomoly Detection",
+		"Lang=NodeJS"
+	],
+	"description" : "Anomoly Detection using Median Absolute Deviation statistical analysis",
+	"initialState" : "Untrained",
+	"actions" : [
+		{
+			"formType" : "mad-train", "comment" : "this is a hack for current lack of use of dynamic forms",
+			"type":"singleton",
+			"enablingStates" : ["Untrained"],
+			"successState" : "Trained",
+			"name" : "Train Detector",
+			"help" : "Train the Anomoly Detection model based on historical data",
+			"parameters" : 
+				[
+					{
+						"description" : "Coefficient",
+						"default" : 1.43
+					}
+				],
+			"input" : {
+				"help" : "Historical data to train detector on",
+				"format" : "csv-file",
+				"format-options" : {
+					"location" : "./input.csv"
+				},
+				"fields" : [
+					{
+						"timestamp":true,
+						"epoc":"d",
+						"headerLabel":"ds",
+						"format":"\"isoDate\""
+					},
+					{
+						"headerLabel":"y"
+					}
+				]
+			},
+			"output" : {
+				"state" : {
+					"location" : "./model.json"
+				}
+			}
+		},
+		{
+			"formType" : "mad-detect", "comment" : "this is a hack for current lack of use of dynamic forms",
+			"type" : "periodic",
+			"enablingStates" : ["Trained"],
+			"successState" : "Detecting",
+			"name" : "Detect",
+			"help" : "Start detecting anomolies",
+			"parameters" : 
+				[
+					{
+						"help" : "MAD Deviations",
+						"default" : 2
+					}
+				],
+			"input" : {
+				"period" : "required",
+				"state" : {
+					"location" : "./model.json"
+				},
+				"help" : "Historical data to train detector on",
+				"format" : "csv-file",
+				"format-options" : {
+					"location" : "./input.csv"
+				},
+				"fields" : [
+					{
+						"timestamp":true,
+						"epoc":"d",
+						"headerLabel":"ds",
+						"format":"\"isoDate\""
+					},
+					{
+						"headerLabel":"y"
+					}
+				]
+			},
+			"output" : {
+			}
+		}
+	]
+}

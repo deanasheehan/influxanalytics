@@ -32,6 +32,9 @@ Spin up the container with mock input data, no command line arguments (forecast 
 ### Spark Streaming
 - - Like the Activate Detection without the Training BUT using stream in and out in some way
 
+# TODO
+- Instances Detail to show all enabled actions. For forecast only one, for MAD then Train and then Train + Detect
+
 
 
 
