@@ -1,34 +1,34 @@
-<p>
-Instance Detail
-</p>
 <div *ngIf="instance">
-    <p><strong>Name:</strong> {{instance.instanceName}}</p>
-    <p><strong>Description:</strong> {{instance.instanceDescription}}</p>
-    <!-- config& params -->
-    <!-- what actions can be executed? -->
-    <!-- I'm hardcoding Generate Forecast for the moment -->
+    <p>{{instance.instanceName}} : {{instance.catalog.actions[0].help}}</p>
 
-  
+    <!--
+        These will need to be a generic data driven form but I'm not going to invest 
+        in building that yet (using https://angular.io/guide/dynamic-form) as a bit heavyweight
+        for this hacky prototype
+
+        So, I'm hardcoding some conditionals in this HTML
+    -->
+
 
 
           <mat-grid-list cols="2" rowHeight="100px">
                 <mat-grid-tile>
-                        <mat-form-field class="example-full-width" hintLabel="Some help more here">
+                        <mat-form-field class="example-full-width" hintLabel="{{instance.catalog.actions[0].parameters[0].help}}">
                                 <input [(ngModel)]="inputParamDays" name="inputParamDays" matInput placeholder="Day" value="365">
                         </mat-form-field>
                 </mat-grid-tile>
                 <mat-grid-tile>
-                        <mat-form-field  class="example-full-width" hintLabel="Some help here">
+                        <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[0].output.help}}">
                                 <input [(ngModel)]="outputDatabase" name="outputDatabase" matInput placeholder="Output Database">
                         </mat-form-field>
                 </mat-grid-tile>
                 <mat-grid-tile>
-                        <mat-form-field  class="example-full-width" hintLabel="Some help here">
+                        <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[0].input.help}}">
                                 <input [(ngModel)]="inputQuery" name="inputQuery" matInput placeholder="Input Query">
                         </mat-form-field>
                 </mat-grid-tile>
                 <mat-grid-tile>
-                        <mat-form-field  class="example-full-width" hintLabel="Some help here">
+                        <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[0].output.help}}">
                                 <input [(ngModel)]="outputMeasurement" name="outputMeasurement" matInput placeholder="Output Measurement">
                         </mat-form-field>
                 </mat-grid-tile>

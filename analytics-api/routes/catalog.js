@@ -8,7 +8,7 @@ let catalogImages = [
   'testimage',
   'testimage2',
   'testimage3',
-  'fbprophetr'
+  'fbprophetmock'
 ]
 
 let catalog = []

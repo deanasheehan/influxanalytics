@@ -10,6 +10,8 @@ export class InstancesComponent implements OnInit {
 
   instanceItems = null
   selectedInstance = null
+  displayedColumns = ["instanceName","description","state"]
+
 
   constructor(private instancesService: InstancesService) { }
 

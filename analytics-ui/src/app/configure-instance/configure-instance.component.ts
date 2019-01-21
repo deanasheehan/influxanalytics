@@ -30,9 +30,7 @@ export class ConfigureInstanceComponent implements OnInit {
     private http: HttpClient) { }
 
     instanceName = "";
-    instanceDescription = "";
-    instanceInputQuery = "";
-    configDays = "";
+    instanceDescription = "A default description - please replace";
 
     ngOnInit() {
       this.instanceName = nameGenerator('-')
@@ -53,10 +51,7 @@ export class ConfigureInstanceComponent implements OnInit {
       let instanceDoc = {
         instanceName: this.instanceName,
         instanceDescription: this.instanceDescription,
-        instanceInputQuery: this.instanceInputQuery,
-        params: {
-          configDays : this.configDays
-        }
+        catalog : this.catalogItem
       }
 
       const httpOptions = {
