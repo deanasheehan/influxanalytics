@@ -24,7 +24,21 @@ export class InstanceDetailComponent implements OnInit {
   }
 
   execute () {
-    this.instanceService.execute(this.instance.instanceName)
+    let body = {
+      action : "Generate Forecast",
+      input: {
+        query : {
+            db : "analytics", // TODO
+            text: this.inputQuery // 'SELECT "value" FROM "analytics"."autogen"."data"'
+        }
+      },
+      output : {
+        db : this.outputDatabase, // "analytics",
+        measurement : this.outputMeasurement // "forecast"
+      } 
+    }
+
+    this.instanceService.execute(this.instance.instanceName,body)
       .subscribe(obj=>{
         this.router.navigate(['/activities']);
       })
