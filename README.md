@@ -33,7 +33,13 @@ Spin up the container with mock input data, no command line arguments (forecast 
 - - Like the Activate Detection without the Training BUT using stream in and out in some way
 
 # TODO
-- Instances Detail to show all enabled actions. For forecast only one, for MAD then Train and then Train + Detect
+- - Execute Train on MAD 
+- - - Use a MAD stub initially
+- - - Get it to record state (that it picks up)
+- - - Change state of instance to Trained
+- - - Make the action display respect the enabled states
+
+- - - Periodic detection
 
 
 

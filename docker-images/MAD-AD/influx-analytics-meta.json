@@ -1,5 +1,5 @@
 {
-	"name" : "MAD Anomoly Detecion",
+	"name" : "MAD Anomoly Detection",
 	"tags" : [
 		"Machine Learning",
 		"Anomoly Detection",
@@ -19,6 +19,7 @@
 				[
 					{
 						"description" : "Coefficient",
+						"help" : "Calculating MAD requires a constant coefficient.",
 						"default" : 1.43
 					}
 				],
@@ -44,7 +45,10 @@
 				"state" : {
 					"location" : "./model.json"
 				}
-			}
+			},
+			"entrypoint" : {
+				"cmd" : "./train.js"
+			} 
 		},
 		{
 			"formType" : "mad-detect", "comment" : "this is a hack for current lack of use of dynamic forms",
@@ -83,6 +87,9 @@
 				]
 			},
 			"output" : {
+			},
+			"entrypoint" : {
+				"cmd" : "./detect.js"
 			}
 		}
 	]

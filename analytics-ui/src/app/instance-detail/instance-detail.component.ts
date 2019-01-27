@@ -36,12 +36,12 @@ export class InstanceDetailComponent implements OnInit {
   }
 
   detectFormDataBinding = {
-    deviation: 2,
-    frequency: 5,
+    deviations: 2,
+    period: 5,
     inputDatabase : "analytics",
-    inputQuery : "",
-    outputDatabase : "",
-    outputMeasurement : ""    
+    inputQuery : "query",
+    outputDatabase : "database",
+    outputMeasurement : "measurement"    
   }
 
   constructor(private instanceService: InstancesService,private router: Router) { }

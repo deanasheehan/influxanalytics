@@ -16,9 +16,21 @@ export class CatalogComponent implements OnInit {
 
   displayedColumns = ["name","description","tags"]
 
+  interval = null;
+
   ngOnInit() {
     this.catalogService.getCatalogItems()
-    .subscribe(items => this.catalogItems = items);
+      .subscribe(items => {
+        this.catalogItems = items
+        this.interval = setInterval( () => {
+          this.catalogService.getCatalogItems()
+            .subscribe(items => this.catalogItems = items); 
+        },1000);
+      });
+  }
+
+  ngOnDestroy(){
+    clearInterval(this.interval);
   }
 
   onSelect (item) {

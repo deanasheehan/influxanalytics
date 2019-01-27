@@ -9,12 +9,21 @@
         The restriction is that the input data binding is to a concrete field of the underlying typescript 
         component and not a more dynamic structure like a map of objects or such
     -->
-    
+    <p align="left">Actions for: <strong>{{instance.instanceName}}</strong> an instance of <strong>{{instance.catalog.name}}</strong></p> 
+    <mat-accordion>
+   
     <div *ngFor="let action of instance.catalog.actions; let actionIndex=index">
-                <p>{{instance.instanceName}}</p>
                 <div *ngIf="actionEnabledByIndex(actionIndex)">
                         <div *ngIf="formByActionIndex(actionIndex)== 'forecast'">
-                                <p>{{instance.catalog.actions[actionIndex].help}}</p>
+
+
+                        <mat-expansion-panel>
+
+                                <mat-expansion-panel-header>
+                                        <mat-panel-title>Generate Forecast</mat-panel-title>
+                                        <mat-panel-description>{{instance.catalog.actions[actionIndex].help}}</mat-panel-description>
+                                </mat-expansion-panel-header>
+
                                         <mat-grid-list cols="2" rowHeight="100px">
                                         <mat-grid-tile>
                                                 <mat-form-field class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].parameters[0].help}}">
@@ -38,60 +47,86 @@
                                         </mat-grid-tile>
                                 </mat-grid-list>
                                 <button mat-raised-button (click)="executeActionByIndex(actionIndex)">Generate Forecast</button>
+
+                        </mat-expansion-panel>
+
+
                         </div>
 
                         <div *ngIf="formByActionIndex(actionIndex)=='mad-train'">
-                                <p>{{instance.catalog.actions[actionIndex].help}}</p>
+
+
+                        <mat-expansion-panel>
+
+                                        <mat-expansion-panel-header>
+                                                <mat-panel-title>Train Detector</mat-panel-title>
+                                                <mat-panel-description>{{instance.catalog.actions[actionIndex].help}}</mat-panel-description>
+                                        </mat-expansion-panel-header>
+        
+
                                 <mat-grid-list cols="2" rowHeight="100px">
                                         <mat-grid-tile>
                                                 <mat-form-field class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].parameters[0].help}}">
-                                                        <input [(ngModel)]="trainFormDataBinding.coefficient" name="inputQoefficient" matInput placeholder="Coefficient">
+                                                        <input [(ngModel)]="trainFormDataBinding.coefficient" name="inputQoefficient" matInput placeholder="Coefficient" size="50">
                                                 </mat-form-field>
                                         </mat-grid-tile>
                                         <mat-grid-tile>
                                                 <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].input.help}}">
-                                                        <input [(ngModel)]="forecastFormDataBinding.inputQuery" name="inputQuery" matInput placeholder="Input Query">
+                                                        <input [(ngModel)]="forecastFormDataBinding.inputQuery" name="inputQuery" matInput placeholder="Input Query"  size="50">
                                                 </mat-form-field>
                                         </mat-grid-tile>
                                 </mat-grid-list>
                                 <button mat-raised-button (click)="executeActionByIndex(actionIndex)">Train Detector</button>
+                        </mat-expansion-panel>
                 </div>
 
                 <div *ngIf="formByActionIndex(actionIndex)=='mad-detect'">
 
-                        <p>{{instance.catalog.actions[actionIndex].help}}</p>
+                        <mat-expansion-panel  [disabled]="false">
+
+                        <mat-expansion-panel-header>
+                                <mat-panel-title>Start Detection</mat-panel-title>
+                                <mat-panel-description>{{instance.catalog.actions[actionIndex].help}}</mat-panel-description>
+                        </mat-expansion-panel-header>
+
                         <mat-grid-list cols="2" rowHeight="100px">
                         <mat-grid-tile>
                                 <mat-form-field class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].parameters[0].help}}">
-                                        <input [(ngModel)]="detectFormDataBinding.coefficient" name="inputParamDays" matInput placeholder="Coefficient">
+                                        <input [(ngModel)]="detectFormDataBinding.deviations" name="deviations" matInput placeholder="Deviations" size="50">
                                 </mat-form-field>
                         </mat-grid-tile>
                         <mat-grid-tile>
                                 <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].output.help}}">
-                                        <input [(ngModel)]="detectFormDataBinding.outputDatabase" name="outputDatabase" matInput placeholder="Output Database">
+                                        <input [(ngModel)]="detectFormDataBinding.outputDatabase" name="outputDatabase" matInput placeholder="Output Database" size="50">
                                 </mat-form-field>
                         </mat-grid-tile>
                         <mat-grid-tile>
                                 <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].input.help}}">
-                                        <input [(ngModel)]="detectFormDataBinding.inputQuery" name="inputQuery" matInput placeholder="Input Query">
+                                        <input [(ngModel)]="detectFormDataBinding.inputQuery" name="inputQuery" matInput placeholder="Input Query" size="50">
                                 </mat-form-field>
                         </mat-grid-tile>
                         <mat-grid-tile>
                                 <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].output.help}}">
-                                        <input [(ngModel)]="detectFormDataBinding.outputMeasurement" name="outputMeasurement" matInput placeholder="Output Measurement">
+                                        <input [(ngModel)]="detectFormDataBinding.outputMeasurement" name="outputMeasurement" matInput placeholder="Output Measurement" size="50">
                                 </mat-form-field>
                         </mat-grid-tile>
                         <mat-grid-tile>
-                                <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].output.help}}">
-                                        <input [(ngModel)]="detectFormDataBinding.period" name="outputMeasurement" matInput placeholder="Period">
+                                <mat-form-field  class="example-full-width" hintLabel="How frequently to execute detection">
+                                        <input [(ngModel)]="detectFormDataBinding.period" name="period" matInput placeholder="Period" size="50">
                                 </mat-form-field>
                         </mat-grid-tile>
                         </mat-grid-list>
                         <button mat-raised-button (click)="executeActionByIndex(actionIndex)">Start Detection</button>
 
+                </mat-expansion-panel>
                 </div>
 
-        </div>        
+        </div> 
+        
+        <mat-divider></mat-divider>
+
     </div>
+
+        </mat-accordion>
 
 </div>
