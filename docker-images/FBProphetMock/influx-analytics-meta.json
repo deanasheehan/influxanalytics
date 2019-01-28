@@ -11,6 +11,8 @@
 			"formType" : "forecast", "comment" : "this is a hack for current lack of use of dynamic forms",
 			"name" : "Generate Forecast",
 			"help" : "Prepare a forecast according to the input data and forecast parameters",
+			"enablingStates" : ["Ready"],
+			"successState" : "Ready",
 			"parameters" : 
 				[
 					{

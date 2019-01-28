@@ -8,10 +8,25 @@ var async = require('async')
 var dateformat = require('dateformat')
 const tar = require('tar');
 const {Docker} = require('node-docker-api');
+var tarfs = require('tar-fs')
 
 
 let instances = [
 ]
+
+function getInstanceGivenName (name) {
+    console.log('looking for instance',name)
+    let result = null;
+    instances.forEach(item =>{
+        if (item.instanceName == name) {
+            console.log('found it at',item)
+            result = item
+        } else {
+            console.log('didnt find it at',item)
+        }
+    })
+    return result;
+}
 
 router.get('/', function(req, res, next) {
   res.json(instances);
@@ -19,6 +34,15 @@ router.get('/', function(req, res, next) {
 
 router.post('/',function(req,res,next){
   console.log('received new instance',req.body)
+
+
+    if (req.body.catalog.initialState) {
+        req.body.state = req.body.catalog.initialState
+    } else {
+        req.body.state = 'Ready';
+    }
+
+
   instances.push(req.body);
   res.json(req.body)
 })
@@ -68,24 +92,51 @@ router.post('/:id/execute',function(req,res,next){
         if (response && response.statusCode == 200) {
             let jsonBody = JSON.parse(body);
             let series = jsonBody.results[0].series[0].values  
-            let writeStream = fs.createWriteStream('query-output.csv',{flags:'a'});
+            console.log('series',series)
+
+            // nast non-generic hack 
+            let fileName = "query-output.csv";
+            if (req.body.action == 'Train Detector') {
+                fileName = 'input.csv'
+            }
+
+            let writeStream = fs.createWriteStream(fileName,{flags:'a'});
+            if (req.body.action == 'Train Detector') {
+                writeStream.write("Date,Value\n")
+            }
             series.forEach(item => {
-                writeStream.write('\"');
-                writeStream.write(dateformat(new Date(item[0]),'isoDate'))
-                writeStream.write('\",')
-                writeStream.write(""+item[1])
+                 if (req.body.action == 'Train Detector') {
+                    writeStream.write(Number(item[0]).toString())
+                } else {
+                    writeStream.write('\"');
+                    writeStream.write(dateformat(new Date(item[0]),'isoDate'))
+                    writeStream.write('\"')
+                }
+                writeStream.write(","+item[1])
                 writeStream.write('\n')
             });
             writeStream.end(()=>{
-                
+                let tarFileName = "query-output-csv.tar";
+                if (req.body.action == 'Train Detector') {
+                    tarFileName = 'input-csv.tar'
+                }
                 tar.c({
-                    file:'query-output-csv.tar',
+                    file:tarFileName, // 'query-output-csv.tar',
                     },
-                    ['./query-output.csv'])
+                    ['./'+fileName])
                     .then(()=>{
                         console.log('tar created')
-                        executeAnalysis()
-                          .then(()=>uploadForecast(req.body.output.db,req.body.output.measurement))
+                        executeAnalysis(req.params.id,req.body)
+                          .then(()=>{
+                            if (req.body.action == 'Train Detector') {
+                                return captureState(req.params.id)
+                            } else {
+                                return uploadForecast(req.body.output.db,req.body.output.measurement)
+                            }
+                          })
+                          .then(()=>{
+                              setCompletedState(req.params.id,req.body.action)
+                          })
                           .then(()=>{
                             activities["addActivity "](Date.now(),req.params.id,req.body.action,"Completed")
                           })
@@ -110,46 +161,99 @@ router.post('/:id/execute',function(req,res,next){
     } else {
         console.log('error',error)
     }
-  })
-
-  // spin up container with input tar
-
-  // wait for container to finish
-
-  // pull results tar
-
-  // send to influx
-
-  // record the instance executing has finished
-  
+  })  
 
   res.json({})
 })
 
 module.exports = router;
 
-function executeAnalysis () {
+
+function captureState (id) {
+    let instance = getInstanceGivenName(id);
+    // read in state obj and attached to this instance
+    var contents = fs.readFileSync("state.json");
+    var jsonContent = JSON.parse(contents);
+    instance.state = jsonContent;
+}
+
+function setCompletedState (instanceName, actionName) {
+    let instance = getInstanceGivenName(instanceName);
+    for (index = 0; index < instance.catalog.actions.length; index++) {
+        if (instance.catalog.actions[index].name == actionName) {
+            instance.state = instance.catalog.actions[index].successState;
+        }
+    }
+}
+
+function executeAnalysis (instanceName,body) {
+
+    let instance = getInstanceGivenName(instanceName);
+    console.log('instance',instance)
+
   const docker = new Docker({ socketPath: '/var/run/docker.sock' });
   let container = null;  
-  return docker.container.create({Image: 'fbprophetmock'})
+  return docker.container.create({Image: instance.catalog.imageName}) // 'fbprophetmock'})
     .then(_container => {container = _container})
     .then(() => container.status())
     .then(status => console.log("pre upload status",status.data.State.Status))
-    .then(() => container.fs.put('./query-output-csv.tar', {path: 'root'}))
+    .then(()=>{
+        if (body.action == 'Train Detector') {
+            console.log('loading up input-csv.tar')
+            return container.fs.put('./input-csv.tar', {path: '/'})
+        } else {
+            console.log('loading up query-output-csv.tar')
+            return container.fs.put('./query-output-csv.tar', {path: 'root'})
+        }    
+    })
     .then(() => container.status())
     .then(status => console.log("post upload status",status.data.State.Status))  
     .then(() => container.start())
     .then(() => waitForExit(container))
     .then(() => console.log('container completed'))
-    .then(() => container.fs.get({ path: './output.csv' }))
-    .then(stream => {
-      console.log('creating tar of container output csv')
-      const file = fs.createWriteStream("analysis-output-csv.tar");
-      stream.pipe(file);
-      return promisifyStream(stream);
+    .then(()=>{
+        if (body.action == 'Train Detector') {
+             console.log('about to get state.json from container')
+            return container.fs.get({ path: './state.json' })
+            .then(stream => {
+                console.log('creating tar of container state-json.tar')
+                const file = fs.createWriteStream("state-json.tar");
+                stream.pipe(file);
+                return promisifyStream(stream);
+            })
+            .then(()=>{
+                console.log('state-json.tar stream completed')
+                var stream2 = fs.createReadStream('state-json.tar')
+                stream2.pipe(tarfs.extract('./'));
+                console.log('created stream and returning promise on it')
+                return promisifyStream(stream2);
+            })
+            .then(()=>{
+                console.log('the fs steam finished')
+            })
+            .then(() => container.delete())
+            .catch(error => console.log('error is',error))
+        } else {
+            console.log('about to get output.csv from container')
+            return container.fs.get({ path: './output.csv' })
+            .then(stream => {
+                console.log('creating tar of container output csv')
+                const file = fs.createWriteStream("analysis-output-csv.tar");
+                stream.pipe(file);
+                return promisifyStream(stream);
+            })
+            .then(()=>{
+                console.log('analysis-output-csv.tar stream completed')
+            })
+            .then(() => tar.x({file:'./analysis-output-csv.tar'}))
+            .then(()=>{
+                var contents = fs.readFileSync("output.csv");
+                console.log('have opened analysis output.csv')
+            })
+            .then(() => container.delete())
+            .catch(error => console.log('error is',error))
+        }
     })
-    .then(() => container.delete())
-    .catch(error => console.log('error is',error))
 }
 
 const waitForExit = theContainer => new Promise((resolve,reject) => {
@@ -172,7 +276,7 @@ const waitForExit = theContainer => new Promise((resolve,reject) => {
 
 const promisifyStream = stream => new Promise((resolve, reject) => {
   stream.on('end', resolve)
-  stream.on('error', reject)
+  stream.on('error',reject)
 });
 
 
@@ -237,3 +341,4 @@ function uploadForecast (database, measurement) {
 
   });
 }
+

@@ -17,7 +17,7 @@
                         <div *ngIf="formByActionIndex(actionIndex)== 'forecast'">
 
 
-                        <mat-expansion-panel>
+                        <mat-expansion-panel [disabled]="isActionDisabledByIndex(actionIndex)">
 
                                 <mat-expansion-panel-header>
                                         <mat-panel-title>Generate Forecast</mat-panel-title>
@@ -56,7 +56,7 @@
                         <div *ngIf="formByActionIndex(actionIndex)=='mad-train'">
 
 
-                        <mat-expansion-panel>
+                        <mat-expansion-panel [disabled]="isActionDisabledByIndex(actionIndex)">
 
                                         <mat-expansion-panel-header>
                                                 <mat-panel-title>Train Detector</mat-panel-title>
@@ -72,7 +72,7 @@
                                         </mat-grid-tile>
                                         <mat-grid-tile>
                                                 <mat-form-field  class="example-full-width" hintLabel="{{instance.catalog.actions[actionIndex].input.help}}">
-                                                        <input [(ngModel)]="forecastFormDataBinding.inputQuery" name="inputQuery" matInput placeholder="Input Query"  size="50">
+                                                        <input [(ngModel)]="trainFormDataBinding.inputQuery" name="inputQuery" matInput placeholder="Input Query"  size="50">
                                                 </mat-form-field>
                                         </mat-grid-tile>
                                 </mat-grid-list>
@@ -82,7 +82,7 @@
 
                 <div *ngIf="formByActionIndex(actionIndex)=='mad-detect'">
 
-                        <mat-expansion-panel  [disabled]="false">
+                        <mat-expansion-panel  [disabled]="isActionDisabledByIndex(actionIndex)">
 
                         <mat-expansion-panel-header>
                                 <mat-panel-title>Start Detection</mat-panel-title>

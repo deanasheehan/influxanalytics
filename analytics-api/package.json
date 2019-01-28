@@ -16,6 +16,7 @@
     "node-docker-api": "^1.1.22",
     "request": "^2.88.0",
     "tar": "^4.4.8",
+    "tar-fs": "^1.16.3",
     "tar-stream": "^1.6.2"
   }
 }
