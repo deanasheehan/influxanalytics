@@ -11,7 +11,7 @@
 		{
 			"formType" : "mad-train", "comment" : "this is a hack for current lack of use of dynamic forms",
 			"type":"singleton",
-			"enablingStates" : ["Untrained"],
+			"enablingStates" : ["Untrained","Trained"],
 			"successState" : "Trained",
 			"name" : "Train Detector",
 			"help" : "Train the Anomoly Detection model based on historical data",
@@ -53,6 +53,7 @@
 		{
 			"formType" : "mad-detect", "comment" : "this is a hack for current lack of use of dynamic forms",
 			"type" : "periodic",
+			"containerCmd" : "./detect.js",
 			"enablingStates" : ["Trained"],
 			"successState" : "Detecting",
 			"name" : "Detect",
@@ -69,7 +70,7 @@
 				"state" : {
 					"location" : "./model.json"
 				},
-				"help" : "Historical data to train detector on",
+				"help" : "Data to check for anomolies",
 				"format" : "csv-file",
 				"format-options" : {
 					"location" : "./input.csv"

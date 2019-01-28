@@ -37,11 +37,11 @@ export class InstanceDetailComponent implements OnInit {
 
   detectFormDataBinding = {
     deviations: 2,
-    period: 5,
+    period: 10,
     inputDatabase : "analytics",
-    inputQuery : "query",
-    outputDatabase : "database",
-    outputMeasurement : "measurement"    
+    inputQuery : 'SELECT "value" FROM "analytics"."autogen"."activity"',
+    outputDatabase : "analytics",
+    outputMeasurement : "activity-anomoly"    
   }
 
   constructor(private instanceService: InstancesService,private router: Router) { }
@@ -96,7 +96,22 @@ export class InstanceDetailComponent implements OnInit {
     }  
 
     if (this.instance.catalog.actions[actionIndex].formType == 'mad-detect') {
-      // send in the period stuff as well
+      body = {
+        action : "Detect",
+        input: {
+          query : {
+              db : this.detectFormDataBinding.inputDatabase,
+              text: this.detectFormDataBinding.inputQuery 
+          }
+        },
+        output : {
+          db : this.detectFormDataBinding.outputDatabase, 
+          measurement : this.detectFormDataBinding.outputMeasurement 
+        },
+        periodic : {
+          frequency : this.detectFormDataBinding.period
+        } 
+      }
     }  
 
     this.instanceService.execute(this.instance.instanceName,body)

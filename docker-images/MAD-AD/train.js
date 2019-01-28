@@ -30,6 +30,8 @@ var csvStream = csv()
             mad:mad
         }
 
+        console.log('state is',model,m,mad)
+
         fs.writeFile('state.json', JSON.stringify(model), 'utf8', ()=>{
             console.log('OK')
         });
