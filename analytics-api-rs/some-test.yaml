@@ -1,0 +1,32 @@
+name: Facebook Prophet
+tags:
+  - Machine Learning
+  - Forecasting
+  - Lang=R 
+description: he Facebook Prophet Algorithm for seasonal forecasting
+actions:
+  - name: Generate Forecast
+    help: Prepare a forecast according to the input data and forecast parameters
+    formType: Generate Forecast
+    enablingStates: [Ready]
+    successSate: Ready
+    parameters:
+      - name: Days
+        type: Integer
+        help: How many days in the future would you like to forecast for?
+        default: 365
+    input:
+      help: Historical data to base forecast upon
+      format: csv-file
+      format-options:
+        location: "./input.csv"
+    output:
+      help: Destination for the forecat results
+      format: csv-file
+      format-options:
+        location: "./output.csv"
+    state:
+      input:
+        location: "./state.json"
+      output:
+        location: ".state.json"
